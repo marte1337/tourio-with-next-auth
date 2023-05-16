@@ -50,3 +50,43 @@ export default function Home() {
     </>
   );
 }
+
+{/* 
+1. npm install next-auth
+2.  next-auth API Route erstellen: pages/api/auth/[…nextauth].js (copy file from docs)
+3. Den Session Kontext bereitstellen:
+import {SessionProvider} from “next-auth/react”
+<SessionProvider session={pageProps.session}>
+	<Component {…pageProps} />
+</SessionProvider>
+4. Den useSession-Hook benutzen:
+Import {useSession, signIn, signOut} from “next-auth/react”
+signIn und signOut-Funktionen für Login benutzen (siehe docs)
+const {data: session} = useSession();
+…z.B. Conditional rendering: { session && <button>…</button> }
+5. O-Auth App bei Github anmelden:
+Settings -> Developer Settings -> OAuth Apps -> New OAuth App
+Authorization callback URL: z.B. http://localhost:3000/api/auth/callback/github
+Client ID kopieren und in .env.local als GITHUB__ID eintragen
+Client Secret erzeugen, kopieren und als GITHUB_SECRET in .env.local speichern
+(Tipp: Für Vercel-Deployment eigene OAuth App eintragen)
+6. Next-auth Umgebungsvariablen:
+NEXTAUTH_URL=http://localhost:3000 (bzw. Vercel-Deployment)
+NEXTAUTH_SECRET=<secret>
+Das <secret> in der Konsole mit dem Befehl openssl rand -base64 32 erzeugen, kopieren und hier speichern.
+7. API Route sichern (siehe docs):
+Import { getServerSession } from “next-auth/next”
+Import { authOptions} from “../auth/[…nextauth]”
+const session = await getServerSession (req, res, authOptions}
+if (session){ //success…}
+else { // not authorized}
+Daten an User binden:
+8. Modell anpassen:
+…
+author: String
+…
+9. POST-Request anpassen:
+const place= new Place ( { …placeData, author: session.user.email } )
+10. GET-Request anpassen:
+const places = await Place.find ( { author: session.user.email } 
+ */}
